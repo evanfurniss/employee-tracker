@@ -66,12 +66,45 @@ function addRole(){
         type: "input",
         name: "title",
         message: "What is your title?"
+      },
+      {
+        name: "salary",
+        type: "number",
+        message: "Please enter salary"
+      },
+      {
+        name: "department_id",
+        type: "list",
+        message: "Select the department you work for",
+        choices: ["Sales","Marketing","Management","Accounting"]
       }
     ]).then(data => {
-      let query = `INSERT INTO role (title, saraly, department_id)`;
+      let departmentID = getDepartmentIDs(data.department_id);
+      let query = `INSERT INTO role (title, salary, department_id) VALUES("${data.title}", "${data.salary}", "${departmentID}")`;
+      // console.log(departmentID);
+      connection.query(query, function (err){
+        if (err) throw (err);
+      });
     });
 };
 
 function addEmployee(){
   console.log("Hello world");
+};
+
+function getDepartmentIDs(data){
+  switch (data){
+    case "Management":
+      return 1;
+      break;
+    case "Marketing":
+      return 2;
+      break;
+    case "Sales":
+      return 3;
+      break;
+    case "Accounting":
+      return 4;
+      break;
+  };
 };

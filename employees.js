@@ -21,7 +21,7 @@ function mainMenu(){
       {
         type: "list",
         message: "what would you like to do?",
-        choices: ["Add Department","Add Role", "Add Employee"],
+        choices: ["Add Department","Add Role", "Add Employee", "Exit"],
         name: "mainmenu"
       }
     ]).then((data) => {
@@ -35,12 +35,26 @@ function mainMenu(){
         case "Add Employee":
           addEmployee();
           break;
+        default:
+          break;
       };
     });
 };
 
 function addDepartment(){
-  console.log("Hello world");
+  inq 
+    .prompt([
+      {
+        name: "department",
+        type: "input",
+        message: "What is your department name?"
+      }
+    ]).then((data) => {
+      let query = `INSERT INTO department(name) VALUES "${data.department}"`;
+      connection.query(query, err => err ? err : console.log("yea yea"));
+      console.table(data);
+      mainMenu();
+    });
 };
 
 function addRole(){

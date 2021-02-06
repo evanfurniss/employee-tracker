@@ -36,6 +36,7 @@ function mainMenu(){
           addEmployee();
           break;
         default:
+          console.log("SEE YA NERD");
           break;
       };
     });
@@ -50,11 +51,12 @@ function addDepartment(){
         message: "What is your department name?"
       }
     ]).then((data) => {
-      let query = `INSERT INTO department(name) VALUES "${data.department}"`;
-      connection.query(query, err => err ? err : console.log("yea yea"));
-      console.table(data);
+      let query = `INSERT INTO department (name) VALUES ("${data.department}")`;
+      connection.query(query, function(err) {
+        if(err) throw (err);
       mainMenu();
     });
+  });
 };
 
 function addRole(){

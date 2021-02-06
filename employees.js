@@ -60,7 +60,16 @@ function addDepartment(){
 };
 
 function addRole(){
-  console.log("Hello world");
+  inq
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "What is your title?"
+      }
+    ]).then(data => {
+      let query = `INSERT INTO role (title, saraly, department_id)`;
+    });
 };
 
 function addEmployee(){

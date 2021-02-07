@@ -60,12 +60,22 @@ function addDepartment(){
 };
 
 function addRole(){
+  connection.query("SELECT * FROM role", function(err, res){
+  if (err) throw(err);
   inq
     .prompt([
       {
-        type: "input",
+        type: "list",
         name: "title",
-        message: "What is your title?"
+        message: "What is your title?",
+        choices: function(){
+          let choiceArr = [];
+          for (let i = 0; i < res.length; i++){
+            choiceArr.push(res[i].title)
+          };
+          choiceArr.push("Add new title");
+          return choiceArr;
+        }
       },
       {
         name: "salary",
@@ -76,16 +86,16 @@ function addRole(){
         name: "department_id",
         type: "list",
         message: "Select the department you work for",
-        choices: ["Sales","Marketing","Management","Accounting"]
+        choices: ["Management","Marketing","Sales","Accounting","IT","Human Resources","Research and Development"]
       }
     ]).then(data => {
       let departmentID = getDepartmentIDs(data.department_id);
       let query = `INSERT INTO role (title, salary, department_id) VALUES("${data.title}", "${data.salary}", "${departmentID}")`;
-      // console.log(departmentID);
       connection.query(query, function (err){
         if (err) throw (err);
       });
     });
+  });
 };
 
 function addEmployee(){
@@ -105,6 +115,15 @@ function getDepartmentIDs(data){
       break;
     case "Accounting":
       return 4;
+      break;
+    case "IT":
+      return 5;
+      break;
+    case "Human Resources":
+      return 6;
+      break;
+    case "Research and Development":
+      return 7;
       break;
   };
 };

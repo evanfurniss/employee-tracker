@@ -9,7 +9,7 @@ CREATE TABLE department (
 );
 
 CREATE TABLE role (
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id INT AUTO_INCREMENT,
     title VARCHAR(30),
     salary DECIMAL,
     department_id INT,
@@ -17,7 +17,7 @@ CREATE TABLE role (
 );
 
 CREATE TABLE employee (
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id INT AUTO_INCREMENT,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
     role_id INT,
@@ -25,7 +25,7 @@ CREATE TABLE employee (
     PRIMARY KEY (id)
 );
 
-SELECT * FROM department;
+SELECT * FROM role;
 
 INSERT INTO department (name) VALUES ("Management");
 INSERT INTO department (name) VALUES ("Marketing");

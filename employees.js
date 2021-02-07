@@ -1,5 +1,5 @@
-const mysql = require("mysql");
 const inq = require("inquirer");
+const mysql = require("mysql");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -21,11 +21,20 @@ function mainMenu(){
       {
         type: "list",
         message: "what would you like to do?",
-        choices: ["Add Department","Add Role", "Add Employee", "Exit"],
+        choices: ["View Departments","View Roles","View Employees","Add Department","Add Role", "Add Employee", "Exit"],
         name: "mainmenu"
       }
     ]).then((data) => {
       switch (data.mainmenu){
+        case "View Departments":
+          viewDepartments();
+          break;
+        case "View Roles":
+          viewRoles();
+          break;
+        case "View Employees":
+          viewEmployees();
+          break;
         case "Add Department":
           addDepartment();
           break;
@@ -40,6 +49,26 @@ function mainMenu(){
           break;
       };
     });
+};
+
+function viewDepartments(...data){
+  connection.query("SELECT * FROM department", function(err, res){
+    if (err) throw (err);
+  console.table(res);
+  mainMenu();
+  });
+};
+
+function viewRoles(...data){
+  connection.query("SELECT * FROM role", function(err, res){
+    if (err) throw (err);
+  console.table(res);
+  mainMenu();
+  })
+};
+
+function viewEmployees(...data){
+  console.log("hello world");
 };
 
 function addDepartment(){
@@ -80,16 +109,17 @@ function addRole(){
       {
         name: "salary",
         type: "number",
-        message: "Please enter salary"
+        message: "Please enter your salary"
       },
       {
         name: "department_id",
         type: "list",
         message: "Select the department you work for",
-        choices: ["Management","Marketing","Sales","Accounting","IT","Human Resources","Research and Development"]
+        choices: getDepartmentIDs()
       }
     ]).then(data => {
-      let departmentID = getDepartmentIDs(data.department_id);
+      let departmentID = parseInt(data.department_id);
+      console.log(departmentID);
       let query = `INSERT INTO role (title, salary, department_id) VALUES("${data.title}", "${data.salary}", "${departmentID}")`;
       connection.query(query, function (err){
         if (err) throw (err);
@@ -102,28 +132,15 @@ function addEmployee(){
   console.log("Hello world");
 };
 
-function getDepartmentIDs(data){
-  switch (data){
-    case "Management":
-      return 1;
-      break;
-    case "Marketing":
-      return 2;
-      break;
-    case "Sales":
-      return 3;
-      break;
-    case "Accounting":
-      return 4;
-      break;
-    case "IT":
-      return 5;
-      break;
-    case "Human Resources":
-      return 6;
-      break;
-    case "Research and Development":
-      return 7;
-      break;
-  };
+function getDepartmentIDs(){
+  var choiceArr = [];
+  connection.query("SELECT * FROM department", function(err, res){
+    if (err) throw (err);
+    for(let i = 0; i < res.length; i++){
+      choiceArr.push(`${res[i].id} ${res[i].name}`);
+    };
+  });
+  return choiceArr;
 };
+
+// ["1 Management","2 Marketing","3 Sales","4 Accounting","5 IT","6 Human Resources","7 Research and Development"]

@@ -34,8 +34,8 @@ If you think you can add functionality to this project, see a bug, or have styli
 
 ## Demo
 
-Check out the file demo video here: https://drive.google.com/file/d/1-mxL0-g0UUkyTSQNhUGOPG9BOIOw7TSN/view
+Check out the file demo video here: https://drive.google.com/file/d/1JjIc8waLNFXkwjftCE94jvV_0TSRRgdg/view
 
-![Start up.](./public/pics/start.png)
+![Start up.](./assets/start.png)
 
-![EMployee table exmample](./public/pics/ex.png)
+![EMployee table exmample](./assets/end.png)

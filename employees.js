@@ -67,10 +67,11 @@ function viewRoles(){
     if (err) throw (err);
   console.table(res);
   mainMenu();
-  })
+  });
 };
 
 function viewEmployees(){
+  let managers = getManagerNames();
   connection.query("SELECT * FROM employee", function(err, res){
     if (err) throw (err);
   console.table(res);
@@ -214,3 +215,16 @@ function getEmployees(){
   });
   return choiceArr;
 };
+
+function getManagerNames(){
+  let managersArr = [];
+  connection.query("SELECT * FROM employee", function(err, res){
+    if (err) throw (err);
+    for (let i = 0; i < res.length; i++) {
+      if (res[i].manager_id === "null"){
+        managersArr.push(res[i]);
+      };
+    };
+  });
+  return managersArr;
+}

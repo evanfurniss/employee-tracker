@@ -19,10 +19,10 @@ function mainMenu(){
   inq
     .prompt([
       {
+        name: "mainmenu",
         type: "list",
         message: "what would you like to do?",
-        choices: ["View Departments","View Roles","View Employees","Add Department","Add Role", "Add Employee", "Exit"],
-        name: "mainmenu"
+        choices: ["View Departments","View Roles","View Employees","Update Employee","Add Department","Add Role","Add Employee","Exit"]
       }
     ]).then((data) => {
       switch (data.mainmenu){
@@ -34,6 +34,9 @@ function mainMenu(){
           break;
         case "View Employees":
           viewEmployees();
+          break;
+        case "Update Employee":
+          updateEmployee();
           break;
         case "Add Department":
           addDepartment();
@@ -51,7 +54,7 @@ function mainMenu(){
     });
 };
 
-function viewDepartments(...data){
+function viewDepartments(){
   connection.query("SELECT * FROM department", function(err, res){
     if (err) throw (err);
   console.table(res);
@@ -59,7 +62,7 @@ function viewDepartments(...data){
   });
 };
 
-function viewRoles(...data){
+function viewRoles(){
   connection.query("SELECT * FROM role", function(err, res){
     if (err) throw (err);
   console.table(res);
@@ -67,8 +70,36 @@ function viewRoles(...data){
   })
 };
 
-function viewEmployees(...data){
-  console.log("hello world");
+function viewEmployees(){
+  connection.query("SELECT * FROM employee", function(err, res){
+    if (err) throw (err);
+  console.table(res);
+  mainMenu();
+  })
+};
+
+function updateEmployee(){
+  inq
+    .prompt([
+      {
+        name: "employee_name",
+        type: "list",
+        message: "Which employee would you like to update?",
+        choices: getEmployees()
+      },
+      {
+        name: "role_id",
+        type: "list",
+        message: "What is their new role?",
+        choices: getRoleIDs()
+      }
+    ]).then((data) => {
+      let roleID = parseInt(data.role_id);
+      connection.query(`UPDATE employee SET WHERE ?`, {role_id:`${roleID}`},function(err, res){
+        if (err) throw (err);
+        mainMenu();
+      });
+    });
 };
 
 function addDepartment(){
@@ -89,22 +120,12 @@ function addDepartment(){
 };
 
 function addRole(){
-  connection.query("SELECT * FROM role", function(err, res){
-  if (err) throw(err);
   inq
     .prompt([
       {
-        type: "list",
         name: "title",
-        message: "What is your title?",
-        choices: function(){
-          let choiceArr = [];
-          for (let i = 0; i < res.length; i++){
-            choiceArr.push(res[i].title)
-          };
-          choiceArr.push("Add new title");
-          return choiceArr;
-        }
+        type: "input",
+        message: "What is your title?"
       },
       {
         name: "salary",
@@ -119,21 +140,50 @@ function addRole(){
       }
     ]).then(data => {
       let departmentID = parseInt(data.department_id);
-      console.log(departmentID);
       let query = `INSERT INTO role (title, salary, department_id) VALUES("${data.title}", "${data.salary}", "${departmentID}")`;
       connection.query(query, function (err){
         if (err) throw (err);
       });
     });
-  });
 };
 
 function addEmployee(){
-  console.log("Hello world");
+  inq
+    .prompt([
+      {
+        name: "first_name",
+        type: "input",
+        message: "Enter employee's first name"        
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "Enter employee's last name"
+      },
+      {
+        name: "role_id",
+        type: "list",
+        message: "Select employee's role",
+        choices: getRoleIDs()
+      },
+      {
+        name: "manager_id",
+        type: "list",
+        message: "Please select your manager",
+        choices: getEmployees()
+      }
+    ]).then(data => {
+      let roleID = parseInt(data.role_id);
+      let managerID = parseInt(data.manager_id)
+      connection.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${data.first_name}", "${data.last_name}", ${roleID}, ${managerID})`, function(err, res){
+        if (err) throw (err);
+        mainMenu();
+      });
+    });
 };
 
 function getDepartmentIDs(){
-  var choiceArr = [];
+  let choiceArr = [];
   connection.query("SELECT * FROM department", function(err, res){
     if (err) throw (err);
     for(let i = 0; i < res.length; i++){
@@ -143,4 +193,24 @@ function getDepartmentIDs(){
   return choiceArr;
 };
 
-// ["1 Management","2 Marketing","3 Sales","4 Accounting","5 IT","6 Human Resources","7 Research and Development"]
+function getRoleIDs(){
+  let choiceArr = [];
+  connection.query("SELECT role.id, role.title FROM role", function(err, res){
+    if (err) throw (err);
+    for (let i =0; i < res.length; i++){
+      choiceArr.push(`${res[i].id} ${res[i].title}`);
+    };
+  });
+  return choiceArr;
+}
+
+function getEmployees(){
+  let choiceArr = [];
+  connection.query("SELECT * FROM employee", function(err, res){
+    if (err) throw (err);
+    for (let i = 0; i < res.length; i++){
+      choiceArr.push(`${res[i].id} ${res[i].first_name} ${res[i].last_name}`);
+    };
+  });
+  return choiceArr;
+};

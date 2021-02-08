@@ -24,10 +24,3 @@ CREATE TABLE employee (
     manager_id INT,
     PRIMARY KEY (id)
 );
-
-SELECT * FROM role;
-
-INSERT INTO department (name) VALUES ("Management");
-INSERT INTO department (name) VALUES ("Marketing");
-INSERT INTO department (name) VALUES ("Sales");
-INSERT INTO department (name) VALUES ("Accounting");

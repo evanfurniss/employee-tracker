@@ -48,7 +48,7 @@ function mainMenu(){
           addEmployee();
           break;
         default:
-          console.log("SEE YA NERD");
+          console.log("Press 'Control C' to exit");
           break;
       };
     });

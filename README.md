@@ -29,7 +29,7 @@ If you think you can add functionality to this project, see a bug, or have styli
 # Contact
 
 * Email: evanfurniss@gmail.com
-* LinkedIn: https://www.linkedin.com/in/evan-furniss-03894b1bb/
+* LinkedIn: https://www.linkedin.com/in/evan-furniss/
 * GitHub: https://github.com/evanfurniss
 
 ## Demo

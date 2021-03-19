@@ -83,6 +83,11 @@ function updateEmployee(){
   inq
     .prompt([
       {
+        name:"test",
+        type: "input",
+        message: "test"
+      },
+      {
         name: "employee_name",
         type: "list",
         message: "Which employee would you like to update?",
@@ -207,7 +212,7 @@ function getRoleIDs(){
 
 function getEmployees(){
   let choiceArr = [];
-  connection.query("SELECT * FROM employee", function(err, res){
+  connection.query(`SELECT * FROM employee`, function(err, res){
     if (err) throw (err);
     for (let i = 0; i < res.length; i++){
       choiceArr.push(`${res[i].id} ${res[i].first_name} ${res[i].last_name}`);
@@ -218,7 +223,7 @@ function getEmployees(){
 
 function getManagerNames(){
   let managersArr = [];
-  connection.query("SELECT * FROM employee", function(err, res){
+  connection.query(`SELECT * FROM employee WHERE`, function(err, res){
     if (err) throw (err);
     for (let i = 0; i < res.length; i++) {
       if (res[i].manager_id === "null"){
